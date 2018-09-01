@@ -73,28 +73,27 @@ fun mixOptimize(c1: Color, c2: Color) = when {
 }
 
 
-interface Expr
-class Num(val value: Int) : Expr
-class Sum(val left: Expr, val right: Expr) : Expr
+sealed class Expr {
+    class Num(val value: Int) : Expr()
+    class Sum(val left: Expr, val right: Expr) : Expr()
+}
 
 fun eval(e: Expr): Int = when (e) {
-    is Num -> e.value
-    is Sum -> eval(e.left) + eval(e.right)
-    else -> throw IllegalArgumentException("Unknown expression")
+    is Expr.Num -> e.value
+    is Expr.Sum -> eval(e.left) + eval(e.right)
 }
 
 fun evalWithLogging(e: Expr): Int = when (e) {
-    is Num -> {
+    is Expr.Num -> {
         println("num:${e.value}")
         e.value
     }
-    is Sum -> {
+    is Expr.Sum -> {
         val l = evalWithLogging(e.left)
         val r = evalWithLogging(e.right)
         println("sum: $l + $r = ${l + r}")
         l + r
     }
-    else -> throw IllegalArgumentException("Unknown expression")
 }
 
 
@@ -138,8 +137,8 @@ fun readNumber(reader:BufferedReader){
     }
     println(number)
 }
-
-fun main(args:Array<String>){
-    val reader = BufferedReader(StringReader("132a"))
-    readNumber(reader)
-}
+//
+//fun main(args:Array<String>){
+//    val reader = BufferedReader(StringReader("132a"))
+//    readNumber(reader)
+//}
