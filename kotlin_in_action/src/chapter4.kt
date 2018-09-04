@@ -1,4 +1,6 @@
 import java.io.Serializable
+import javax.management.Attribute
+import javax.naming.Context
 
 interface Clickable {
     fun click()
@@ -35,12 +37,12 @@ abstract class Animated{
 // abstract
 // override (デフォルトopen)
 
-fun main(args: Array<String>) {
-    val button =Button()
-    button.click()
-    button.showOff()
-    button.setFocus(true)
-}
+//fun main(args: Array<String>) {
+//    val button =Button()
+//    button.click()
+//    button.showOff()
+//    button.setFocus(true)
+//}
 
 // 4.1.3
 internal open class TalkativeButton:Focusable{
@@ -53,9 +55,97 @@ internal open class TalkativeButton:Focusable{
 //    whisper()
 //}
 
-interface State:Serializable
+//interface State:Serializable
+//
+//interface View{
+//    fun getCurrentState():State
+//    fun restoreState(s:State){}
+//}
 
-interface View{
-    fun getCurrentState():State
-    fun restoreState(s:State){}
+// 4.2
+//class User(val nickname:String,
+//           val isSubscribed:Boolean =true)
+// プライマリコンストラクタと初期化ブロック、
+// セカンダリコンストラクタ、
+// まだ存在意義がわからない。
+open class View{
+    constructor(ctx: Context){
+    }
+    constructor(ctx:Context, attr: Attribute){
+
+    }
 }
+
+class Button2:View{
+    constructor(ctx:Context):super(ctx){
+
+    }
+    constructor(ctx:Context,attr:Attribute):super(ctx,attr){
+
+    }
+}
+
+//interface User{
+////    val email:String
+//    val nickname:String
+////        get() =  email.substringBefore("@")
+//}
+//
+//class PrivateUser(override val nickname:String):User
+//class SubscribedUser(val email:String):User{
+//    override val nickname:String
+//        get() = email.substringBefore("@") // 都度計算
+//}
+//class FacebookUser(val accountId:Int):User{
+//    override val nickname = getNickname(accountId)  // 初回のみ
+//
+//    private fun getNickname(accountId: Int): String = "hogehoge$accountId" //
+//}
+
+class User(val name:String){
+    var address = "Japan"
+        set(value:String){
+            println("""
+                Address will changed
+                "$field" -> "$value"
+            """.trimIndent())
+            field =value
+        }
+}
+
+//fun main(args: Array<String>) {
+//    val u = User("taktamur")
+//    u.address = "Nagoya"
+//}
+data class Client2(val name:String,val postalCode:Int)
+
+class Client(val name:String,val postalCode:Int){
+    override fun toString(): String = "name=$name, postalCode=$postalCode"
+    override fun hashCode(): Int = name.hashCode()*31+postalCode
+    override fun equals(other: Any?): Boolean {
+        return when{
+            other == null -> false
+            other !is Client -> false
+            other.name != this.name ->false
+            other.postalCode !=this.postalCode -> false
+            else ->true
+        }
+//        if( other==null || other !is Client){
+//            return false
+//        }
+//        return other.name ==name &&
+//                other.postalCode==postalCode
+    }
+}
+
+fun main(args: Array<String>) {
+    val c1 = Client2("taktamur",2110025)
+    val c2 = Client2("taktamur",2110025)
+    val c3 = Client2("taktamur",211005)
+    println(c1==c2)
+    println(c1==c3)
+}
+
+class DelegateCollection<T>(
+    val innerList:Collection<T> = ArrayList<T>()
+):Collection<T> by innerList
