@@ -150,4 +150,3 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/macos,kotlin,gradle,intellij
 
 libs
-twitter4j.properties
