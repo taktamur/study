@@ -9,6 +9,9 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_list.*
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.content.Intent
+
+
 
 
 class ListActivity : AppCompatActivity() {
@@ -29,6 +32,11 @@ class ListActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
             arrayAdapter.add("hogehoge")
+        }
+
+        list.setOnItemClickListener { parent, view, position, id ->
+            startActivity(Intent(this, DetailActivity::class.java))
+
         }
 
 //        val listView = ListView(this)
