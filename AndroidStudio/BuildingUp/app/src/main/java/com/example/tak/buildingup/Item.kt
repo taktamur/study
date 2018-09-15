@@ -2,12 +2,9 @@ package com.example.tak.buildingup
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.annotation.*
 
-import kotlinx.android.synthetic.main.activity_list.view.*
 import org.jetbrains.annotations.TestOnly
 import java.io.*
-import java.util.stream.Collectors.toList
 
 
 data class Item(
@@ -27,7 +24,6 @@ object ItemRepository{
         return itemMap
     }
 
-
     fun add(name:String){
         val item = Item(name)
         itemMap[name] =item
@@ -44,8 +40,8 @@ object ItemRepository{
         itemMap.clear()
     }
 
-    fun all(): Collection<Item> {
-        return itemMap.values
+    fun all(): Array<Item> {
+        return itemMap.values.toTypedArray()
     }
 
     fun json(): String {
@@ -61,6 +57,7 @@ object ItemRepository{
     fun load(){
         val json =File("item.json").readText()
         val mapper = jacksonObjectMapper()
+        // TODO これエラーするからチェック入れる
         itemMap = mapper.readValue<ItemMap>(json)
     }
 }
