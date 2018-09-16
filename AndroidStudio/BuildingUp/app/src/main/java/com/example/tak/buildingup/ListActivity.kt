@@ -19,33 +19,40 @@ import android.view.LayoutInflater
 
 
 class ListActivity : AppCompatActivity() {
-    private val texts = listOf("abc ", "bcd", "cde", "def", "efg", "fgh", "ghi", "hij", "ijk", "jkl", "klm",
-            "abc ", "bcd", "cde", "def", "efg", "fgh", "ghi", "hij", "ijk", "jkl", "klm")
 
     private var count = 0;
+    private val itemMap = ItemRepository.getItemMap()
+    private val itemAdapter:ItemAdapter by lazy{ ItemAdapter(this, arrayOf())}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
         setSupportActionBar(toolbar)
-        ItemRepository.add("1")
-        ItemRepository.add("2")
-        val itemAdapter = ItemAdapter(this, ItemRepository.all())
+        itemMap.add("1")
+        itemMap.add("2")
         list.setAdapter(itemAdapter)
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
-            ItemRepository.add("hogehoge$count")
+            itemMap.add("hogehoge$count")
             count = count+1
             println(ItemRepository.all())
-            itemAdapter.setMytemList(ItemRepository.all())
+            itemAdapter.setMytemList(itemMap.all())
             itemAdapter.notifyDataSetChanged()
         }
 
         list.setOnItemClickListener { parent, view, position, id ->
-            startActivity(Intent(this, DetailActivity::class.java))
-
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("itemposition", position)
+            startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        itemAdapter.setMytemList(itemMap.all())
+        itemAdapter.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -65,10 +72,7 @@ class ListActivity : AppCompatActivity() {
     }
 
     private inner class ItemAdapter(context:Context,var itemList:Array<Item>) : BaseAdapter() {
-        val layoutInflater: LayoutInflater
-        init {
-            this.layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        }
+        val layoutInflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         override fun getCount(): Int {
             return itemList.count()
