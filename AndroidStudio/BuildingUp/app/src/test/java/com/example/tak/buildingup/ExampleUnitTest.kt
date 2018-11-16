@@ -16,11 +16,11 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
     }
     @Before
-    fun 初期化(){
+    fun setup(){
         ItemRepository.getItemMap().clear()
     }
     @Test
-    fun ItemMapのテスト(){
+    fun testItemMap(){
         val itemMap = ItemRepository.getItemMap()
         val item1 = itemMap.find("1")
         assertNull(item1)
@@ -37,7 +37,7 @@ class ExampleUnitTest {
     }
 
     @Test
-    fun json化(){
+    fun json(){
         val itemMap = ItemRepository.getItemMap()
         itemMap.add("1")
         itemMap.add("2")
@@ -46,7 +46,7 @@ class ExampleUnitTest {
     }
 
     @Test
-    fun saveとLode(){
+    fun saveAndLode(){
         ItemRepository.add("1")
         ItemRepository.add("2")
         println(ItemRepository.getItemMap())
@@ -60,5 +60,29 @@ class ExampleUnitTest {
         val item3 = itemMap.find("2")
         assertEquals(item3,Item("2"))
 
+    }
+    @Test
+    fun getClassName(){
+        var o:String? = null
+//        println(o::class.simpleName)
+        o = "hoge"
+        println(o::class.simpleName)
+        val s:String = o
+        println(s::class.simpleName)
+        smartcast(null)
+        smartcast(1)
+        smartcast("hogehoge")
+
+    }
+
+    fun smartcast(a:Any?){
+        println("====")
+        println(a)
+//        println(a::class.simpleName)  // コンパイラがエラーになる
+        if( a==null){ return }
+        println(a::class.simpleName)
+        if( a !is String ){ return }
+        println(a::class.simpleName)
+        val b = a + "hoge"
     }
 }
