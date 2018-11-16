@@ -91,7 +91,7 @@ fun AppCompatActivity.read(): List<PhotoData> {
 data class Location(val lat:Double, val lon:Double)
 
 class PhotoData(val uri: Uri, val date: Date, val loc:Location?){
-    private val df = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+    private val df = SimpleDateFormat("yyyy/MM/dd HH:mm")
 
     var dateString:String = ""
         get() = df.format(date)
