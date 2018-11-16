@@ -74,6 +74,7 @@ class PhotoCardActivity : AppCompatActivity() {
             // ここではモデルに値をセットしている
             // →DataBindingにより、自動でViewに反映される
             holder.binding.date = list[position].dateString
+            holder.binding.visibleLocationIcon = list[position].loc != null
             //Picasso.get().load(list[position].uri).fit().centerInside().into(holder.binding.imageView)
             Glide.with(context).load(list[position].uri).into(holder.binding.imageView)
         }
